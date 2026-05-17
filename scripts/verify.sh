@@ -116,7 +116,7 @@ run_stage2() {
   header "Stage 2 — DNS resolution from flask_api"
 
   for target in redis_cache postgres_db; do
-    if docker exec flask_api nslookup "$target" > /dev/null 2>&1; then
+    if docker exec flask_api python -c "import socket; socket.getaddrinfo('$target', None)" > /dev/null 2>&1; then
       pass "flask_api resolves $target by name"
     else
       fail "flask_api cannot resolve $target"
